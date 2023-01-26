@@ -21,10 +21,11 @@ app.use(bodyParser.json()); // Parse JSON request bodies
 // Define a secret key for JWT
 const secretKey = process.env.SECRET_KEY;
 
-// Define routes
-app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to the API!' });
-});
+const mainRoutes = require('./routes/main');
+const versionRoutes = require('./routes/version');
+
+app.get('/', mainRoutes);
+app.use('/api/v1/', versionRoutes);
 
 // app.post('/login', (req, res) => {
 //     // Authenticate the user
