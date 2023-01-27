@@ -5,13 +5,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
-    "postinstall": "nodemon server.js",
-    "start:prod": "forever start node_modules/nodemon/bin/nodemon.js server.js",
     "start:logger": "forever start --minUptime 2000 --spinSleepTime 2000 logger.js"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.20"
-  },
+  "devDependencies": {},
   "dependencies": {
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
