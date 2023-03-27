@@ -9,7 +9,7 @@ function createWebSocketServer() {
 
   // Handle WebSocket connections
   wsServer.on('connection', (socket) => {
-    console.log(socket)
+    //console.log(socket)
     console.log(`WebSocket client connected`);
 
     // Add client to set
@@ -17,7 +17,7 @@ function createWebSocketServer() {
 
     // Handle WebSocket messages
     socket.on('message', (data) => {
-      console.log(`Received message: ${data} from client ${socket}`);
+      console.log(`Received message: ${data} from client`);
 
       // Broadcast message to other clients
       for (const client of clients) {
