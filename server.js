@@ -1,42 +1,25 @@
-require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const helmet = require('helmet');
-const { connectToDatabase } = require('./services/db');
-const { createWebSocketServer } = require('./services/websocket');
+const WebSocket = require('ws');
+const PORT = process.env.PORT || 8080;
 
+const wss = new WebSocket.Server({ port: PORT });
 
-// Connect to MongoDB
-//connectToDatabase(process.env.DB_CONNECT); 
+wss.on('connection', (ws) => {
+  console.log('WebSocket connected');
 
-// Create an express app
-const app = express();
+  ws.on('message', (data) => {
+    console.log(`Received message: ${data}`);
 
-// Use middlewares
-app.use(cors()); // Enable CORS
-app.use(helmet()); // Add security headers
-app.use(bodyParser.json()); // Parse JSON request bodies
-app.use(bodyParser.urlencoded({ extended: false })); // Parse application/x-www-form-urlencoded request bodies
-
-const mainRoutes = require('./routes/main');
-const versionRoutes = require('./routes/api/v1/version');
-const authRoutes = require('./routes/api/v1/auth');
-
-app.use('/api/v1/', authRoutes);
-app.get('/', mainRoutes);
-app.use('/api/v1/', versionRoutes);
-
-// Create WebSocket server
-createWebSocketServer();
-
-// Start the server
-const port = process.env.PORT || 3000;
-const server = app.listen(port, () => {
-    console.log(`Server started on http://localhost:${port}`);
-});
-server.on('upgrade', (req, socket, head) => {
-    wss.handleUpgrade(req, socket, head, (ws) => {
-      wss.emit('connection', ws, req);
+    // Broadcast the message to all clients
+    wss.clients.forEach((client) => {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(`Broadcast: ${data}`);
+      }
     });
   });
+
+  ws.on('close', () => {
+    console.log('WebSocket disconnected');
+  });
+});
+
+console.log(`WebSocket server started on port ${PORT}`);
