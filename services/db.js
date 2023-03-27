@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 exports.connectToDatabase = async (connectUrl) => {
     try {
         mongoose.set('strictQuery', false);  
-        mongoose.set('useNewUrlParser', true);
+        //mongoose.set('useNewUrlParser', true);
       
         await mongoose.connect(connectUrl);
   

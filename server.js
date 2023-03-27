@@ -4,9 +4,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const { connectToDatabase } = require('./services/db');
+const { createWebSocketServer } = require('./services/websocket');
+
 
 // Connect to MongoDB
-connectToDatabase(process.env.DB_CONNECT); 
+//connectToDatabase(process.env.DB_CONNECT); 
 
 // Create an express app
 const app = express();
@@ -24,6 +26,9 @@ const authRoutes = require('./routes/api/v1/auth');
 app.use('/api/v1/', authRoutes);
 app.get('/', mainRoutes);
 app.use('/api/v1/', versionRoutes);
+
+// Create WebSocket server
+createWebSocketServer();
 
 // Start the server
 const port = process.env.PORT || 3000;
