@@ -4,8 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js",
-    "startws": "node wsserver.js",
+    "start": "node wsserver.js",
     "start:logger": "forever start --minUptime 2000 --spinSleepTime 2000 logger.js"
   },
   "devDependencies": {},
