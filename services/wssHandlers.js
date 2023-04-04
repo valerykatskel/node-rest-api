@@ -3,9 +3,9 @@ const clients = new Set();
 const onCloseHandler = () => console.log('WebSocket disconnected');
 
 const onConnectionHandler = (socket) => {
-    console.log(`WebSocket клиент подключился`);
     // Add client to set
     clients.add(socket);
+    console.log(`WebSocket клиент подключился c IP ${socket.remoteAddress}.  Всего клиентов: ${clients.size}`);
 
     socket.on('message', (data) => {
         console.log(`Получено сообщение: ${data} from client`);
