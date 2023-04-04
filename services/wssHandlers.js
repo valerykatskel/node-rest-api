@@ -10,7 +10,7 @@ const onConnectionHandler = (socket) => {
             // Broadcast message to other clients
             for (const client of clients) {
                 if (client !== socket) {
-                    client.send(`Переслано всем: ${mes}`);
+                    client.send(`${mes}`);
                 }
             }
         } else {
@@ -21,17 +21,18 @@ const onConnectionHandler = (socket) => {
             }
             try {
                 const { login, machineId, message } = JSON.parse(data);
+                console.log(login);
+                console.log(machineId)
                 // Validate the login and machine ID
-                if (login !== process.env.handlarVXv2 || machineId !== process.env.ALLOW_MACHINEID) {
+                if (login !== process.env.ALLOW_LOGIN || machineId !== process.env.ALLOW_MACHINEID) {
                     console.log(`Rejected client with invalid credentials: ${socket.remoteAddress}`);
                     socket.close(1007, 'Invalid data');
                     return;
                 }
                 
-                console.log(`Accepted client with login=${login} and machineId=${machineId}: ${socket.remoteAddress}. Total: ${clients.size}`);
-    
                 // Add client to set
                 clients.add(socket);
+                console.log(`Accepted client with login=${login} and machineId=${machineId}: ${socket.remoteAddress}. Total: ${clients.size}`);
             } catch (error) {
                 console.log(`Rejected client with wrong message format`);
                 socket.close(1003, 'Unsupported data');
