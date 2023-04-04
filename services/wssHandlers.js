@@ -5,6 +5,7 @@ const onCloseHandler = () => console.log('WebSocket disconnected');
 const onConnectionHandler = (socket) => {
     socket.on('message', (data) => {
       // Parse the incoming message
+      debugger
       if (typeof data === 'string') {
         console.log(`Rejected client with wrong message format: ${socket.remoteAddress}`);
         socket.close();
