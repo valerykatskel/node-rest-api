@@ -5,6 +5,11 @@ const onCloseHandler = () => console.log('WebSocket disconnected');
 const onConnectionHandler = (socket) => {
     socket.on('message', (data) => {
       // Parse the incoming message
+      if (typeof data === 'string') {
+        console.log(`Rejected client with wrong message format: ${socket.remoteAddress}`);
+        socket.close();
+        return;
+      } 
       const { login, machineId, message } = JSON.parse(data);
   
       // Validate the login and machine ID
