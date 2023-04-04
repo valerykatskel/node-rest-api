@@ -1,7 +1,10 @@
 require('dotenv').config();
 const clients = new Set();
 
-const onCloseHandler = (data) => console.log(`WebSocket disconnected, code is ${data}`);
+const onCloseHandler = (socket) => {
+    console.log(`WebSocket disconnected`);
+    clients.delete(socket);
+}
 
 const onConnectionHandler = (socket) => {
     socket.on('message', (data) => {
@@ -35,7 +38,7 @@ const onConnectionHandler = (socket) => {
             }
         }
     });
-    socket.on('close', onCloseHandler);
+    socket.on('close', () => onCloseHandler(socket));
 }
 
 module.exports = { onConnectionHandler };
