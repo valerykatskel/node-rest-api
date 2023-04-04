@@ -1,8 +1,8 @@
 require('dotenv').config();
 const clients = new Set();
 
-const onCloseHandler = (socket) => {
-    console.log(`WebSocket disconnected`);
+const onCloseHandler = (socket, clients) => {
+    console.log(`WebSocket disconnected. Total: ${clients.size}`);
     clients.delete(socket);
 }
 
@@ -18,19 +18,19 @@ const onConnectionHandler = (socket) => {
             }
         } else {
             try {
-                const { login, machineId, message } = JSON.parse(data);
+                //const { login, machineId, message } = JSON.parse(data);
 
                 // Validate the login and machine ID
-                if (machineId !== process.env.ALLOW_MACHINEID) {
+                /*if (machineId !== process.env.ALLOW_MACHINEID) {
                     console.log(`Rejected client with invalid credentials`);
                     socket.close(1007, 'Invalid data');
                     return;
-                }
+                }*/
                 
                 // Add client to set
                 
                 clients.add(socket);
-                console.log(`Accepted client with login=${login} and machineId=${machineId}: ${socket.remoteAddress}. Total: ${clients.size}`);
+                console.log(`Added a new client. Total: ${clients.size}`);
             } catch (error) {
                 console.log(`Rejected client with wrong message format`);
                 socket.close(1003, 'Unsupported data');
@@ -38,7 +38,7 @@ const onConnectionHandler = (socket) => {
             }
         }
     });
-    socket.on('close', () => onCloseHandler(socket));
+    socket.on('close', () => onCloseHandler(socket, clients));
 }
 
 module.exports = { onConnectionHandler };
